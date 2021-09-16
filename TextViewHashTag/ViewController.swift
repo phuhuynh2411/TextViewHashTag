@@ -13,70 +13,19 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        textView.delegate = self
     }
-    
-    func resolveHashTags(text : String) -> NSAttributedString {
-        var length : Int = 0
-        let text:String = text
-        let words:[String] = text.separate(withChar: " ")
-        let hashtagWords = words.flatMap({$0.separate(withChar: "#")})
-        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)]
-        let attrString = NSMutableAttributedString(string: text, attributes:attrs)
-        for word in hashtagWords {
-            if word.hasPrefix("#") {
-                let matchRange:NSRange = NSMakeRange(length, word.count)
-                let stringifiedWord:String = word
-                
-                attrString.addAttribute(NSAttributedString.Key.link, value: "hash:\(stringifiedWord)", range: matchRange)
-                
-                attrString.addAttribute(NSAttributedString.Key.baselineOffset, value: -4 , range: matchRange)
-                
-                attrString.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.lightGray , range: matchRange)
-                
-            }
-            length += word.count
-        }
-        return attrString
-    }
-    
 }
-
-extension ViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        textView.attributedText = resolveHashTags(text: textView.text)
-        textView.linkTextAttributes = [
-            NSAttributedString.Key.foregroundColor : UIColor.red]    }
-}
-
-extension String {
-    public func separate(withChar char : String) -> [String]{
-        var word : String = ""
-        var words : [String] = [String]()
-        for chararacter in self {
-            if String(chararacter) == char && word != "" {
-                words.append(word)
-                word = char
-            }else {
-                word += String(chararacter)
-            }
-        }
-        words.append(word)
-        return words
-    }
-    
-}
-
 
 class HashtagTextView: UITextView {
     
-    let hashtagRegex = "#[-_0-9A-Za-z]+"
-    
+    var hashtagRegex = "#[-_0-9A-Za-z]+"
     private var cachedFrames: [CGRect] = []
-    
     private var backgrounds: [UIView] = []
+    var hashTagBackgroundColor: UIColor = .lightGray
+    var hashTagCornerRardius: CGFloat = 5.0
+    private let offsetHeight: CGFloat = 4
+    var onlyStartWithTag: Bool = true
+    var hashTags: [String] = []
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -102,6 +51,8 @@ class HashtagTextView: UITextView {
     @objc private func textUpdated() {
         // You can provide whatever ranges needed to be highlighted
         let ranges = resolveHighlightedRanges()
+        let swiftRanges = ranges.compactMap { Range($0, in: text) }
+        hashTags = swiftRanges.map { String(text[$0]) }
         
         let frames = ranges.compactMap { frame(ofRange: $0) }.reduce([], +)
         
@@ -111,23 +62,27 @@ class HashtagTextView: UITextView {
             backgrounds.forEach { $0.removeFromSuperview() }
             backgrounds = cachedFrames.map { frame in
                 let background = UIView()
-                background.backgroundColor = UIColor.gray
-                let newFrame = CGRect(x: frame.minX, y: frame.minY + 10, width: frame.width, height: frame.height - 5)
-                background.frame = frame
-                background.layer.cornerRadius = 5
-                //background.layer.borderWidth = 1.0
-                //background.layer.borderColor = UIColor.red.cgColor
-                //background.backgroundColor = .clear
+                background.backgroundColor = hashTagBackgroundColor
+                let newFrame = CGRect(
+                    x: frame.minX,
+                    y: frame.minY,
+                    width: frame.width,
+                    height: frame.height - offsetHeight
+                )
+                background.frame = newFrame
+                background.layer.cornerRadius = hashTagCornerRardius
                 
                 insertSubview(background, at: 0)
                 return background
             }
         }
+        print(hashTags)
     }
     
     /// General setup
     private func configureView() {
         NotificationCenter.default.addObserver(self, selector: #selector(textUpdated), name: UITextView.textDidChangeNotification, object: self)
+        delegate = self
     }
     
     /// Looks for locations of the string to be highlighted.
@@ -158,6 +113,41 @@ extension UITextView {
             return rects.map { $0.rect }
         } else {
             return nil
+        }
+    }
+}
+
+extension HashtagTextView: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard onlyStartWithTag else { return true }
+        
+        // Detects backspaces
+        if text.isEmpty { return true }
+        
+        // The first tag
+        if textView.text.isEmpty {
+            if text == "#" {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        // Type in a new line
+        if textView.text.last == "#", text == "\n" {
+            return false
+        }
+        
+        // Type double #
+        if textView.text.last == "#", text == "#" {
+            return false
+        }
+        
+        // The other tags
+        if textView.text.last == " ", text != "#" {
+            return false
+        } else {
+            return true
         }
     }
 }

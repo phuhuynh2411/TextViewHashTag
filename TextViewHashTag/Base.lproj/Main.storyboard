@@ -16,21 +16,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ej1-aO-Bhz">
-                                <rect key="frame" x="20" y="147" width="374" height="125"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="125" id="tPK-EC-NN5"/>
-                                </constraints>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Idh-0R-Qan" customClass="HashtagTextView" customModule="TextViewHashTag" customModuleProvider="target">
-                                <rect key="frame" x="20" y="307" width="374" height="128"/>
+                                <rect key="frame" x="20" y="384" width="374" height="128"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="MFg-HW-2lw"/>
+                                    <constraint firstAttribute="height" constant="128" id="r6o-Dh-Mlo"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".SFNS-Regular" family=".SF NS" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -39,17 +29,12 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemYellowColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Idh-0R-Qan" secondAttribute="trailing" constant="20" id="4pQ-dX-AAH"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ej1-aO-Bhz" secondAttribute="trailing" constant="20" id="HqC-eM-VYX"/>
-                            <constraint firstItem="ej1-aO-Bhz" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="103" id="U25-va-dUd"/>
-                            <constraint firstItem="Idh-0R-Qan" firstAttribute="top" secondItem="ej1-aO-Bhz" secondAttribute="bottom" constant="35" id="dk8-UK-bdv"/>
-                            <constraint firstItem="ej1-aO-Bhz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="rnV-Nm-XJI"/>
-                            <constraint firstItem="Idh-0R-Qan" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="yfk-lF-IJ9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Idh-0R-Qan" secondAttribute="trailing" constant="20" id="2dH-nf-DUN"/>
+                            <constraint firstItem="Idh-0R-Qan" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="7Ha-E2-9lM"/>
+                            <constraint firstItem="Idh-0R-Qan" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Xue-MB-5b1"/>
+                            <constraint firstItem="Idh-0R-Qan" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oqm-ZS-ph8"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="textView" destination="ej1-aO-Bhz" id="SOG-4D-cyD"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -57,9 +42,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
